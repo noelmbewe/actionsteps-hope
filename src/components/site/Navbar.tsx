@@ -36,12 +36,8 @@ export default function Navbar() {
       }`}
     >
       <div className="container flex items-center justify-between h-18 py-3">
-        <Link to="/" className="flex items-center gap-2 group">
-          <img src={logo} alt="ActionSteps Counseling logo" className="h-10 w-10 object-contain" width={40} height={40} />
-          <div className="leading-tight">
-            <div className="font-display font-bold text-primary text-lg">ActionSteps</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Counseling, Inc.</div>
-          </div>
+        <Link to="/" className="flex items-center gap-2 group" aria-label="ActionSteps Counseling home">
+          <img src={logo} alt="ActionSteps Counseling, Inc. — Living the Dream" className="h-12 w-auto object-contain" height={48} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">

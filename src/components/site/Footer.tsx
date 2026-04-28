@@ -7,9 +7,8 @@ export default function Footer() {
     <footer className="bg-primary text-primary-foreground mt-24">
       <div className="container py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
-          <div className="flex items-center gap-2 mb-4">
-            <img src={logo} alt="ActionSteps" className="h-10 w-10 bg-white rounded-full p-1" width={40} height={40} loading="lazy" />
-            <span className="font-display font-bold text-xl">ActionSteps</span>
+          <div className="mb-4 inline-block bg-white rounded-xl p-3">
+            <img src={logo} alt="ActionSteps Counseling, Inc." className="h-12 w-auto object-contain" height={48} loading="lazy" />
           </div>
           <p className="text-primary-foreground/70 text-sm leading-relaxed">
             Restoring lives, strengthening families, and reducing crime through evidence-based recovery and diversion.
