@@ -30,11 +30,7 @@ export default function Navbar() {
   useEffect(() => { setOpen(false); }, [pathname]);
 
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/85 backdrop-blur-xl border-b border-border shadow-soft" : "bg-transparent"
-      }`}
-    >
+    <header className="fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border shadow-soft transition-all duration-300">
       <div className="container flex items-center justify-between h-18 py-3">
         <Link to="/" className="flex items-center gap-2 group" aria-label="ActionSteps Counseling home">
           <img src={logo} alt="ActionSteps Counseling, Inc. — Living the Dream" className="h-12 w-auto object-contain" height={48} />
@@ -48,7 +44,11 @@ export default function Navbar() {
               end={l.to === "/"}
               className={({ isActive }) =>
                 `px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isActive ? "text-primary bg-accent" : "text-foreground/75 hover:text-primary hover:bg-accent/60"
+                  isActive 
+                    ? "text-primary bg-accent" 
+                    : scrolled 
+                      ? "text-foreground/75 hover:text-primary hover:bg-accent/60"
+                      : "text-foreground hover:text-primary hover:bg-accent"
                 }`
               }
             >
