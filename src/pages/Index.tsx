@@ -14,9 +14,9 @@ const stats = [
 ];
 
 const programs = [
-  { icon: Sparkles, title: "ASCEND Aftercare", desc: "10-month aftercare with monthly sessions, sobriety accountability and community mentorship.", to: "/programs/ascend", accent: "from-secondary to-primary-glow" },
+  { icon: Sparkles, title: "ASCEND Aftercare", desc: "10-month aftercare with monthly sessions, sobriety accountability and community.", to: "/programs/ascend", accent: "from-secondary to-primary-glow" },
   { icon: GraduationCap, title: "Addiction Education", desc: "Helping people understand addiction as a brain disease, the impact of trauma and restorative justice.", to: "/education", accent: "from-primary to-secondary" },
-  { icon: BookOpen, title: "Resources", desc: "Reports, downloadable guides, and tools for clients, families, and policymakers.", to: "/impact", accent: "from-primary-glow to-secondary" },
+  { icon: BookOpen, title: "Resources", desc: "Tools for clients, families, and policymakers.", to: "/impact", accent: "from-primary-glow to-secondary" },
   { icon: Calendar, title: "Events", desc: "Community events, fundraisers, and legislative briefings throughout the year.", to: "/contact", accent: "from-secondary to-primary" },
   { icon: HandCoins, title: "Donate", desc: "Support recovery and treatment. Every dollar transforms lives.", to: "/donate", accent: "from-secondary to-primary-glow" },
 ];
@@ -136,7 +136,7 @@ const Index = () => {
       {/* PROGRAMS GRID */}
       <section className="py-24 bg-gradient-soft">
         <div className="container">
-          <SectionHeader eyebrow="What we do" title={<>Programs that <span className="text-gradient">change everything</span>.</>} subtitle="From the first day of diversion through long-term aftercare, every program is designed for measurable, lasting transformation." />
+          <SectionHeader eyebrow="What we do" title={<>Programs that <span className="text-gradient">change everything</span>.</>} subtitle="From the first day of diversion through  aftercare, every program is designed for measurable, lasting transformation." />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((p, i) => (
