@@ -27,7 +27,7 @@ export default function Contact() {
             <div className="reveal bg-gradient-hero text-primary-foreground rounded-3xl p-8 shadow-elegant">
               <AlertCircle className="h-8 w-8 text-secondary" />
               <h3 className="mt-3 font-display text-2xl font-bold">Need help now?</h3>
-              <p className="mt-2 text-primary-foreground/85 text-sm">Call us directly. Confidential intake line available during business hours.</p>
+              <p className="mt-2 text-primary-foreground/85 text-sm">If you or someone else is in immediate danger, or you are having thoughts of suicide with a plan to act, call 911 right now.</p>
               <Button asChild variant="cta" size="lg" className="mt-5 w-full">
                 <a href="tel:9182310195"><Phone /> 918-231-0195</a>
               </Button>
@@ -36,8 +36,8 @@ export default function Contact() {
             <div className="reveal bg-card border border-border rounded-3xl p-8 shadow-soft space-y-5">
               <div className="flex gap-3"><MapPin className="h-5 w-5 text-secondary shrink-0 mt-0.5" /><div><div className="font-semibold text-primary">Office</div><div className="text-sm text-muted-foreground">6016 S 66th East Ave<br />Tulsa, OK 74145</div></div></div>
               <div className="flex gap-3"><Phone className="h-5 w-5 text-secondary shrink-0 mt-0.5" /><div><div className="font-semibold text-primary">Phone</div><a href="tel:9182310195" className="text-sm text-muted-foreground hover:text-primary">918-231-0195</a></div></div>
-              <div className="flex gap-3"><Mail className="h-5 w-5 text-secondary shrink-0 mt-0.5" /><div><div className="font-semibold text-primary">Email</div><a href="mailto:info@actionstepscounseling.org" className="text-sm text-muted-foreground hover:text-primary">info@actionstepscounseling.org</a></div></div>
-              <div className="flex gap-3"><Clock className="h-5 w-5 text-secondary shrink-0 mt-0.5" /><div><div className="font-semibold text-primary">Hours</div><div className="text-sm text-muted-foreground">Mon–Fri · 8am–6pm CT</div></div></div>
+              <div className="flex gap-3"><Mail className="h-5 w-5 text-secondary shrink-0 mt-0.5" /><div><div className="font-semibold text-primary">Email</div><a href="mailto:office@actionstepscounseling.org" className="text-sm text-muted-foreground hover:text-primary">office@actionstepscounseling.org</a></div></div>
+              <div className="flex gap-3"><Clock className="h-5 w-5 text-secondary shrink-0 mt-0.5" /><div><div className="font-semibold text-primary">Hours</div><div className="text-sm text-muted-foreground">Mon–Thu 9AM–7PM · Fri 9AM–3PM<br />Saturday by appointment</div></div></div>
             </div>
           </div>
 

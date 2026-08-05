@@ -16,7 +16,7 @@ const topics = [
 export default function Education() {
   return (
     <Layout>
-      <PageHero eyebrow="Knowledge Center" title={<>Addiction <span className="text-secondary">Education</span> Hub.</>} subtitle="Evidence-based education for clients, families, communities, and policymakers." />
+      <PageHero eyebrow="Knowledge Center" title={<>Understanding <span className="text-secondary">Addiction</span>.</>} subtitle="Addiction Education Hub — evidence-based education for clients, families, communities, and policymakers." />
       <section className="py-24">
         <div className="container">
           <SectionHeader eyebrow="Learn" title={<>Topics that <span className="text-gradient">change minds</span>.</>} />

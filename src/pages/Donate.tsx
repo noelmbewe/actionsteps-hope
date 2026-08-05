@@ -17,7 +17,7 @@ export default function Donate() {
 
   return (
     <Layout>
-      <PageHero eyebrow="Support Our Mission" title={<>Your gift funds someone's <span className="text-secondary">freedom</span>.</>} subtitle="Every dollar directly funds recovery, housing, treatment, and the proven diversion programs that change Oklahoma." />
+      <PageHero eyebrow="Support Our Mission" title={<>Your support funds the road <span className="text-secondary">home</span>.</>} subtitle="Your support funds the road home — today. Every dollar directly funds recovery, treatment, and the proven diversion programs that change Oklahoma." />
 
       <section className="py-24">
         <div className="container max-w-5xl">

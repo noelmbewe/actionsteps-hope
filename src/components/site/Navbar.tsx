@@ -11,7 +11,7 @@ const links = [
   { to: "/programs/ascend", label: "ASCEND" },
   { to: "/impact", label: "Impact" },
   { to: "/education", label: "Education" },
-  { to: "/advocacy", label: "Advocacy" },
+  { to: "/press-room", label: "Press Room" },
   { to: "/contact", label: "Contact" },
 ];
 

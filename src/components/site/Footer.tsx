@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export default function Footer() {
@@ -11,7 +11,7 @@ export default function Footer() {
             <img src={logo} alt="ActionSteps Counseling, Inc." className="h-12 w-auto object-contain" height={48} loading="lazy" />
           </div>
           <p className="text-primary-foreground/70 text-sm leading-relaxed">
-            Restoring lives, strengthening families, and reducing crime through evidence-based recovery and diversion.
+            A mission born from clinical experience — and a gap that couldn't be ignored.
           </p>
           <p className="mt-4 text-secondary font-display italic">"Living the Dream"</p>
         </div>
@@ -30,8 +30,7 @@ export default function Footer() {
           <h4 className="font-display font-semibold mb-4 text-secondary">Get Involved</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/80">
             <li><Link to="/donate" className="hover:text-secondary transition">Donate</Link></li>
-            <li><Link to="/advocacy" className="hover:text-secondary transition">Legislative Advocacy</Link></li>
-            <li><Link to="/testimonials" className="hover:text-secondary transition">Stories</Link></li>
+            <li><Link to="/testimonies" className="hover:text-secondary transition">Stories</Link></li>
             <li><Link to="/contact" className="hover:text-secondary transition">Contact Us</Link></li>
           </ul>
         </div>
@@ -41,15 +40,8 @@ export default function Footer() {
           <ul className="space-y-3 text-sm text-primary-foreground/80">
             <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5 shrink-0 text-secondary" /> 6016 S 66th East Ave, Tulsa, OK 74145</li>
             <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5 shrink-0 text-secondary" /> <a href="tel:9182310195" className="hover:text-secondary">918-231-0195</a></li>
-            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5 shrink-0 text-secondary" /> <a href="mailto:info@actionstepscounseling.org" className="hover:text-secondary">info@actionstepscounseling.org</a></li>
+            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5 shrink-0 text-secondary" /> <a href="mailto:office@actionstepscounseling.org" className="hover:text-secondary">office@actionstepscounseling.org</a></li>
           </ul>
-          <div className="flex gap-3 mt-5">
-            {[Facebook, Instagram, Linkedin, Twitter].map((Icon, i) => (
-              <a key={i} href="#" aria-label="social" className="h-9 w-9 rounded-full bg-white/10 hover:bg-secondary hover:text-primary transition flex items-center justify-center">
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
-          </div>
         </div>
       </div>
       <div className="border-t border-white/10">

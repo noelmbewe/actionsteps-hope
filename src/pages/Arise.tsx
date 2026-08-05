@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const eligibility = [
   "Non-violent felony or misdemeanor charges related to substance use",
   "Drug court, diversion, or DA referral",
-  "Adults committed to long-term recovery",
+  "Adult males committed to long-term recovery",
   "Tulsa County and surrounding areas",
 ];
 const services = [
@@ -19,11 +19,10 @@ const services = [
   { icon: CheckCircle2, title: "Court Liaison", desc: "Direct communication with courts and probation throughout." },
 ];
 const levels = [
-  { name: "Level 1", title: "Stabilization", duration: "Months 1–3", points: ["Intake & assessment", "Daily group therapy", "Crisis stabilization", "Safe housing placement"] },
-  { name: "Level 2", title: "Foundation", duration: "Months 4–6", points: ["Trauma-informed therapy", "Peer support groups", "Family reunification work", "Employment prep"] },
-  { name: "Level 3", title: "Growth", duration: "Months 7–10", points: ["Active employment", "Financial literacy", "Relapse prevention", "Mentorship"] },
-  { name: "Level 4", title: "Reintegration", duration: "Months 11–14", points: ["Independent living", "Community leadership", "Court completion", "Graduation"] },
-  { name: "ASCEND", title: "Aftercare", duration: "10 months", points: ["Monthly sessions", "Continued accountability", "Alumni community"] },
+  { name: "Level 1", title: "Education", duration: "Months 1–3", points: ["Education on neurological impact of alcohol and drugs"] },
+  { name: "Level 2", title: "Cognitive Restructuring", duration: "Months 4–6", points: ["Effects of substance use and criminal behavior on others and society"] },
+  { name: "Level 3", title: "Impact of Psychological Trauma", duration: "Months 7–10", points: ["Impact of life history (events & experiences) on brain maturation"] },
+  { name: "Level 4", title: "Wraparound", duration: "Months 11–14", points: ["Monitoring progress with lifestyle changes"] },
 ];
 
 export default function Arise() {
@@ -35,7 +34,7 @@ export default function Arise() {
         <div className="container grid lg:grid-cols-2 gap-12">
           <div className="reveal">
             <h2 className="font-display text-3xl md:text-4xl font-bold text-primary">Who is ARISE for?</h2>
-            <p className="mt-4 text-muted-foreground text-lg">ARISE serves adults with criminal charges who are ready to commit to lasting change.</p>
+            <p className="mt-4 text-muted-foreground text-lg">ARISE serves adult males with criminal charges who are ready to commit to lasting change.</p>
             <ul className="mt-6 space-y-3">
               {eligibility.map((e) => (
                 <li key={e} className="flex gap-3"><CheckCircle2 className="h-5 w-5 text-secondary mt-0.5 shrink-0" /><span>{e}</span></li>
@@ -57,7 +56,7 @@ export default function Arise() {
 
       <section className="py-24 bg-gradient-soft">
         <div className="container">
-          <SectionHeader eyebrow="Services Offered" title={<>Wraparound care, all under <span className="text-gradient">one roof</span>.</>} />
+          <SectionHeader eyebrow="Services Offered" title={<>Outpatient care, all under <span className="text-gradient">one roof</span>.</>} />
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((s, i) => (
               <div key={i} className="reveal bg-card border border-border rounded-2xl p-7 hover:shadow-elegant hover:-translate-y-1 transition">
@@ -72,11 +71,11 @@ export default function Arise() {
 
       <section className="py-24">
         <div className="container">
-          <SectionHeader eyebrow="Program Timeline" title={<>The <span className="text-gradient">4 levels</span> + ASCEND aftercare.</>} subtitle="Progressive milestones build skills, community, and confidence — every step measurable." />
+          <SectionHeader eyebrow="Program Timeline" title={<>The <span className="text-gradient">4 levels</span> of ARISE.</>} subtitle="Progressive milestones build skills, community, and confidence — every step measurable." />
 
           <div className="relative">
             <div className="hidden md:block absolute left-0 right-0 top-9 h-1 bg-gradient-swoosh rounded-full" />
-            <div className="grid md:grid-cols-5 gap-6">
+            <div className="grid md:grid-cols-4 gap-6">
               {levels.map((l, i) => (
                 <div key={i} className="reveal" style={{ transitionDelay: `${i * 80}ms` }}>
                   <div className="relative flex items-center justify-center">

@@ -1,9 +1,8 @@
 import Layout from "@/components/site/Layout";
 import { PageHero, SectionHeader } from "@/components/site/Section";
-import { Button } from "@/components/ui/button";
-import { Megaphone, FileDown, DollarSign, ArrowRight, Calendar, Clock, User } from "lucide-react";
+import { Megaphone, ArrowRight, Calendar, Clock, User } from "lucide-react";
 
-const posts = [
+const pressReleases = [
   {
     date: "March 18, 2026",
     readTime: "6 min read",
@@ -62,40 +61,17 @@ const posts = [
   },
 ];
 
-const featured = posts.find((p) => p.featured)!;
-const rest = posts.filter((p) => !p.featured);
+const featured = pressReleases.find((p) => p.featured)!;
+const rest = pressReleases.filter((p) => !p.featured);
 
-export default function Advocacy() {
+export default function PressRoom() {
   return (
     <Layout>
-      <PageHero eyebrow="Legislative Advocacy" title={<>Smart on crime. <span className="text-secondary">Strong on outcomes.</span></>} subtitle="We work alongside legislators, judges, and community leaders to expand evidence-based diversion across Oklahoma." />
+      <PageHero eyebrow="Press Room" title={<>News & <span className="text-secondary">Press Releases</span>.</>} subtitle="Latest news, press releases, and media coverage of our advocacy work and program outcomes." />
 
       <section className="py-24">
-        <div className="container grid md:grid-cols-3 gap-6">
-          {[
-            { icon: Megaphone, title: "Contact Legislators", desc: "Make your voice heard. Use our toolkit to reach Oklahoma representatives.", cta: "Open Toolkit" },
-            { icon: FileDown, title: "Download Reports", desc: "Annual impact reports, recidivism studies, and fiscal analyses.", cta: "Download" },
-            { icon: DollarSign, title: "State Savings Data", desc: "Detailed cost-benefit analysis comparing diversion vs incarceration.", cta: "View Data" },
-          ].map((c, i) => (
-            <div key={i} className="reveal bg-card border border-border rounded-2xl p-7 hover:shadow-elegant transition" style={{ transitionDelay: `${i * 60}ms` }}>
-              <div className="h-12 w-12 rounded-xl bg-gradient-swoosh text-white flex items-center justify-center"><c.icon className="h-5 w-5" /></div>
-              <h3 className="mt-4 font-display text-xl font-bold text-primary">{c.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-              <Button variant="outline" className="mt-5 rounded-full">{c.cta} <ArrowRight className="h-4 w-4" /></Button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="py-24 bg-gradient-soft">
         <div className="container">
-          <SectionHeader
-            eyebrow="The ActionSteps Blog"
-            title={<>Stories, research & <span className="text-gradient">reform insights</span>.</>}
-            subtitle="Field reports from the front lines of recovery, diversion, and justice reform in Oklahoma."
-          />
-
-          {/* Featured post */}
+          {/* Featured press release */}
           <article className="reveal group grid lg:grid-cols-2 gap-8 lg:gap-12 bg-card border border-border rounded-3xl overflow-hidden shadow-soft hover:shadow-elegant transition mb-14">
             <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden">
               <img
@@ -121,14 +97,16 @@ export default function Advocacy() {
                 <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" /> {featured.date}</span>
                 <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {featured.readTime}</span>
               </div>
-              <Button variant="hero" className="mt-7 rounded-full self-start">
-                Read the full story <ArrowRight className="h-4 w-4" />
-              </Button>
             </div>
           </article>
 
-          {/* Blog grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Press release grid */}
+          <SectionHeader
+            eyebrow="All Releases"
+            title={<>Latest <span className="text-gradient">news</span>.</>}
+          />
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {rest.map((p, i) => (
               <article
                 key={i}
@@ -155,18 +133,9 @@ export default function Advocacy() {
                     {p.title}
                   </h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{p.excerpt}</p>
-                  <a href="#" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:gap-2.5 transition-all">
-                    Read article <ArrowRight className="h-4 w-4" />
-                  </a>
                 </div>
               </article>
             ))}
-          </div>
-
-          <div className="mt-12 text-center">
-            <Button variant="outline" className="rounded-full">
-              View all articles <ArrowRight className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       </section>
