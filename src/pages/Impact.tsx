@@ -1,7 +1,8 @@
 import Layout from "@/components/site/Layout";
 import { PageHero, SectionHeader } from "@/components/site/Section";
 import Counter from "@/components/site/Counter";
-import { TrendingDown, DollarSign, Home, Briefcase, Brain, Shield, Users, GraduationCap, ArrowRight } from "lucide-react";
+import { TrendingDown, DollarSign, Home, Briefcase, Brain, Shield, Users, GraduationCap, ArrowRight, Quote } from "lucide-react";
+import { impactTestimonies } from "@/data/testimonies";
 
 const bigStats = [
   { icon: TrendingDown, label: "Recidivism Rate", value: 6, suffix: "%", desc: "vs 23% Oklahoma state average" },
@@ -386,6 +387,35 @@ export default function Impact() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIES */}
+      <section className="py-24 bg-primary text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_20%_30%,hsl(var(--primary-glow)/0.5),transparent_45%),radial-gradient(circle_at_80%_70%,hsl(var(--secondary)/0.4),transparent_50%)]" />
+        <div className="container relative max-w-4xl text-center">
+          <span className="px-3 py-1 rounded-full bg-white/15 backdrop-blur text-xs uppercase tracking-widest font-semibold">Behind the Data</span>
+          <Quote className="h-12 w-12 mx-auto mt-8 text-secondary" />
+          <blockquote className="mt-6 font-display text-3xl md:text-4xl font-semibold leading-tight">
+            "{impactTestimonies[0].quote}"
+          </blockquote>
+          <div className="mt-8">
+            <div className="font-semibold text-secondary">— {impactTestimonies[0].name}</div>
+            <div className="text-primary-foreground/70 text-sm">{impactTestimonies[0].role}</div>
+          </div>
+
+          <div className="mt-14 grid md:grid-cols-2 gap-6 text-left">
+            {impactTestimonies.slice(1).map((s, i) => (
+              <div key={i} className="reveal bg-white/10 border border-white/15 rounded-2xl p-8 backdrop-blur" style={{ transitionDelay: `${i * 60}ms` }}>
+                <Quote className="h-8 w-8 text-secondary" />
+                <p className="mt-4 text-primary-foreground/90 leading-relaxed">"{s.quote}"</p>
+                <div className="mt-6 pt-5 border-t border-white/15">
+                  <div className="font-semibold text-secondary">{s.name}</div>
+                  <div className="text-sm text-primary-foreground/70">{s.role}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

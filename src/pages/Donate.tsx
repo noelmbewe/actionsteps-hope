@@ -5,10 +5,10 @@ import { Heart, Home, Pill, GraduationCap, Check } from "lucide-react";
 import { useState } from "react";
 
 const tiers = [
-  { amount: 25, icon: GraduationCap, title: "Educate", desc: "Funds recovery education materials for one client." },
-  { amount: 100, icon: Pill, title: "Treat", desc: "Sponsors one week of treatment services." },
-  { amount: 500, icon: Home, title: "House", desc: "Provides one month of safe sober housing." },
-  { amount: 1500, icon: Heart, title: "Restore", desc: "Sponsors a full ARISE level for one person." },
+  { amount: 10737, icon: GraduationCap, title: "Educate", desc: "Fully funds one man's two-year journey" },
+  { amount: 5000, icon: Pill, title: "Treat", desc: "Covers nearly half a man's path to recovery" },
+  { amount: 500, icon: Home, title: "House", desc: "Keeps a man in Arise for two weeks" },
+  { amount: 50, icon: Heart, title: "Restore", desc: "Funds recovery education materials for one client." },
 ];
 
 export default function Donate() {

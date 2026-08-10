@@ -1,11 +1,12 @@
 import Layout from "@/components/site/Layout";
 import { PageHero, SectionHeader } from "@/components/site/Section";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Quote } from "lucide-react";
+import { ascendTestimonies } from "@/data/testimonies";
 
 const pillars = [
   "Monthly Sessions",
   "Sobriety Accountability",
-  "Community Mentorship",
+  "Community ",
   "Drug Testing",
   "Court Reviews",
 ];
@@ -44,6 +45,29 @@ export default function Ascend() {
               <div key={i} className="reveal bg-card border border-border rounded-2xl p-5 shadow-soft hover:shadow-elegant transition flex items-start gap-3" style={{ transitionDelay: `${i * 60}ms` }}>
                 <CheckCircle2 className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
                 <span className="text-foreground">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIES */}
+      <section className="py-24 bg-primary text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_20%_30%,hsl(var(--primary-glow)/0.5),transparent_45%),radial-gradient(circle_at_80%_70%,hsl(var(--secondary)/0.4),transparent_50%)]" />
+        <div className="container relative max-w-4xl">
+          <div className="text-center reveal">
+            <span className="px-3 py-1 rounded-full bg-white/15 backdrop-blur text-xs uppercase tracking-widest font-semibold">Voices of ASCEND</span>
+            <h2 className="mt-5 font-display text-4xl md:text-5xl font-bold leading-[1.1]">Aftercare that <span className="text-secondary">sticks</span>.</h2>
+          </div>
+          <div className="mt-12 grid md:grid-cols-2 gap-6">
+            {ascendTestimonies.map((s, i) => (
+              <div key={i} className="reveal bg-white/10 border border-white/15 rounded-2xl p-8 backdrop-blur" style={{ transitionDelay: `${i * 60}ms` }}>
+                <Quote className="h-8 w-8 text-secondary" />
+                <p className="mt-4 text-primary-foreground/90 leading-relaxed">"{s.quote}"</p>
+                <div className="mt-6 pt-5 border-t border-white/15">
+                  <div className="font-semibold text-secondary">{s.name}</div>
+                  <div className="text-sm text-primary-foreground/70">{s.role}</div>
+                </div>
               </div>
             ))}
           </div>

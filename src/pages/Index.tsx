@@ -17,7 +17,6 @@ const programs = [
   { icon: Sparkles, title: "ASCEND Aftercare", desc: "10-month aftercare with monthly sessions, sobriety accountability and community.", to: "/programs/ascend", accent: "from-secondary to-primary-glow" },
   { icon: GraduationCap, title: "Addiction Education", desc: "Helping people understand addiction as a brain disease, the impact of trauma and restorative justice.", to: "/education", accent: "from-primary to-secondary" },
   { icon: BookOpen, title: "Resources", desc: "Tools for clients, families, and policymakers.", to: "/impact", accent: "from-primary-glow to-secondary" },
-  { icon: Calendar, title: "Events", desc: "Community events, fundraisers, and legislative briefings throughout the year.", to: "/contact", accent: "from-secondary to-primary" },
   { icon: HandCoins, title: "Donate", desc: "Support recovery and treatment. Every dollar transforms lives.", to: "/donate", accent: "from-secondary to-primary-glow" },
 ];
 

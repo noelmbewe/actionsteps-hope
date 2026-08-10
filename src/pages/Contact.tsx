@@ -19,7 +19,7 @@ export default function Contact() {
 
   return (
     <Layout>
-      <PageHero eyebrow="Contact" title={<>We're here when you're <span className="text-secondary">ready</span>.</>} subtitle="Whether you're seeking help, a family member, a partner, or media — reach out. We respond within one business day." />
+      <PageHero eyebrow="Contact" title={<>We're here when you're <span className="text-secondary">ready</span>.</>} subtitle="Whether you're seeking help, a family member, a partner, or media — reach out." />
 
       <section className="py-24">
         <div className="container grid lg:grid-cols-3 gap-8">
@@ -28,9 +28,7 @@ export default function Contact() {
               <AlertCircle className="h-8 w-8 text-secondary" />
               <h3 className="mt-3 font-display text-2xl font-bold">Need help now?</h3>
               <p className="mt-2 text-primary-foreground/85 text-sm">If you or someone else is in immediate danger, or you are having thoughts of suicide with a plan to act, call 911 right now.</p>
-              <Button asChild variant="cta" size="lg" className="mt-5 w-full">
-                <a href="tel:9182310195"><Phone /> 918-231-0195</a>
-              </Button>
+             
             </div>
 
             <div className="reveal bg-card border border-border rounded-3xl p-8 shadow-soft space-y-5">

@@ -24,7 +24,7 @@ export default function About() {
             <img src={recovery} alt="A new beginning at sunrise" loading="lazy" width={1280} height={960} className="relative rounded-3xl shadow-elegant w-full h-[480px] object-cover" />
           </div>
           <div className="reveal">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-primary leading-tight">A mission born from <span className="text-gradient">lived experience</span>.</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-primary leading-tight">A mission born from lived experience and a <span className="text-gradient">gap that couldn't be ignored.</span></h2>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
               Founded to break the cycle of addiction and incarceration in Oklahoma, ActionSteps Counseling has built one of the most effective diversion programs in the state. We pair clinical excellence with deep human connection — because data alone doesn't restore a family.
             </p>
@@ -38,6 +38,12 @@ export default function About() {
       <section className="py-24 bg-gradient-soft">
         <div className="container">
           <SectionHeader eyebrow="What we stand for" title={<>Six pillars of our <span className="text-gradient">approach</span>.</>} />
+          <center>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Public Safety- Lowering recidivism creates safer communities
+            </p>
+          </center>
+          <br className="my-6" />
           <div className="grid md:grid-cols-3 gap-6">
             {pillars.map((p, i) => (
               <div key={i} className="reveal bg-card border border-border rounded-2xl p-7 hover:shadow-elegant transition" style={{ transitionDelay: `${i * 50}ms` }}>
