@@ -31,6 +31,7 @@ export default function Footer() {
           <ul className="space-y-2 text-sm text-primary-foreground/80">
             <li><Link to="/donate" className="hover:text-secondary transition">Donate</Link></li>
             <li><Link to="/testimonies" className="hover:text-secondary transition">Stories</Link></li>
+            <li><Link to="/articles" className="hover:text-secondary transition">Articles</Link></li>
             <li><Link to="/contact" className="hover:text-secondary transition">Contact Us</Link></li>
           </ul>
         </div>

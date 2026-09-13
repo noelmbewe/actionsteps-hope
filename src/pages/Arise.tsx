@@ -6,8 +6,11 @@ import { Link } from "react-router-dom";
 import { ariseTestimonies } from "@/data/testimonies";
 
 const eligibility = [
-  "Non-violent felony or misdemeanor charges related to substance use",
-  "Drug court, diversion, or DA referral",
+  "Non-violent felony ",
+  "Violent felony ",
+  "Misdemeanor charges ",
+  "Related to substance use",
+  "Drug court, diversion, or legal referral",
   "Adult males committed to long-term recovery",
   "Tulsa County and surrounding areas",
 ];

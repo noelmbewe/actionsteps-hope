@@ -76,7 +76,7 @@ export default function Impact() {
       {/* Recidivism Comparison */}
       <section className="py-24 bg-gradient-soft">
         <div className="container max-w-4xl">
-          <SectionHeader eyebrow="Recidivism Comparison" title={<>A <span className="text-gradient">4x improvement</span> over the state average.</>} subtitle="When people complete ARISE + ASCEND, they don't come back through the justice system." />
+          <SectionHeader eyebrow="Recidivism Comparison" title={<>A <span className="text-gradient">4 times lower</span> rate than the state average.</>} subtitle="When people complete ARISE + ASCEND, they don't come back through the justice system." />
 
           <div className="bg-card rounded-3xl p-8 md:p-10 shadow-elegant border border-border reveal">
             <div className="space-y-8">
@@ -201,7 +201,7 @@ export default function Impact() {
               <h3 className="mt-4 font-display text-2xl font-bold text-primary">Housing</h3>
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="bg-destructive/10 rounded-2xl p-5 text-center">
-                  <div className="font-display text-4xl font-bold text-destructive"><Counter to={100} suffix="%" /></div>
+                  <div className="font-display text-4xl font-bold text-destructive"><Counter to={36} suffix="%" /></div>
                   <div className="text-sm font-semibold mt-1">Homeless at Entry</div>
                 </div>
                 <div className="bg-secondary/10 rounded-2xl p-5 text-center">

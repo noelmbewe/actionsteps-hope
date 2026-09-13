@@ -1,8 +1,8 @@
 import Layout from "@/components/site/Layout";
+import ZeffyDonateModal, { openZeffyDonate } from "@/components/site/ZeffyDonateModal";
 import { PageHero, SectionHeader } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
-import { Heart, Home, Pill, GraduationCap, Check } from "lucide-react";
-import { useState } from "react";
+import { Heart, Home, Pill, GraduationCap } from "lucide-react";
 
 const tiers = [
   { amount: 10737, icon: GraduationCap, title: "Educate", desc: "Fully funds one man's two-year journey" },
@@ -12,9 +12,6 @@ const tiers = [
 ];
 
 export default function Donate() {
-  const [selected, setSelected] = useState<number>(100);
-  const [custom, setCustom] = useState("");
-
   return (
     <Layout>
       <PageHero eyebrow="Support Our Mission" title={<>Your support funds the road <span className="text-secondary">home</span>.</>} subtitle="Your support funds the road home — today. Every dollar directly funds recovery, treatment, and the proven diversion programs that change Oklahoma." />
@@ -23,46 +20,31 @@ export default function Donate() {
         <div className="container max-w-5xl">
           <SectionHeader eyebrow="Sponsor Recovery" title={<>Choose your <span className="text-gradient">impact</span>.</>} />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-            {tiers.map((t) => {
-              const active = selected === t.amount;
-              return (
-                <button
-                  key={t.amount}
-                  onClick={() => { setSelected(t.amount); setCustom(""); }}
-                  className={`text-left rounded-2xl p-6 border transition-all reveal ${
-                    active ? "bg-gradient-hero text-primary-foreground border-transparent shadow-elegant -translate-y-1" : "bg-card border-border hover:shadow-elegant hover:-translate-y-1"
-                  }`}
-                >
-                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${active ? "bg-white/20 text-white" : "bg-gradient-swoosh text-white"}`}>
-                    <t.icon className="h-5 w-5" />
-                  </div>
-                  <div className="mt-4 font-display text-3xl font-bold">${t.amount}</div>
-                  <div className={`mt-1 font-semibold ${active ? "" : "text-primary"}`}>{t.title}</div>
-                  <div className={`mt-1 text-sm ${active ? "opacity-85" : "text-muted-foreground"}`}>{t.desc}</div>
-                  {active && <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-secondary"><Check className="h-3.5 w-3.5" /> Selected</div>}
-                </button>
-              );
-            })}
+            {tiers.map((t) => (
+              <div
+                key={t.amount}
+                className="text-left rounded-2xl p-6 border border-border bg-card hover:shadow-elegant hover:-translate-y-1 transition-all reveal"
+              >
+                <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-gradient-swoosh text-white">
+                  <t.icon className="h-5 w-5" />
+                </div>
+                <div className="mt-4 font-display text-3xl font-bold">${t.amount}</div>
+                <div className="mt-1 font-semibold text-primary">{t.title}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{t.desc}</div>
+              </div>
+            ))}
           </div>
 
-          <div className="bg-card border border-border rounded-3xl p-8 md:p-10 shadow-elegant reveal">
-            <label className="block text-sm font-semibold text-primary mb-3">Or enter a custom amount</label>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-muted-foreground">$</span>
-                <input
-                  type="number"
-                  min={1}
-                  value={custom}
-                  onChange={(e) => setCustom(e.target.value)}
-                  placeholder="100"
-                  className="w-full h-14 pl-9 pr-4 rounded-full border border-input bg-background text-lg font-semibold focus:ring-2 focus:ring-ring focus:outline-none"
-                />
-              </div>
-              <Button variant="hero" size="xl" className="sm:w-auto">
-                Donate ${custom || selected} <Heart />
-              </Button>
+          <div className="bg-card border border-border rounded-3xl p-8 md:p-10 text-center shadow-elegant reveal">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-primary text-xs font-semibold uppercase tracking-widest">
+              <span className="h-1.5 w-1.5 rounded-full bg-secondary" /> 100% free online giving
             </div>
+            <p className="mt-5 text-lg text-muted-foreground mb-6">
+              Support recovery, treatment, and the proven diversion programs that change Oklahoma. Select your gift amount — every dollar counts.
+            </p>
+            <Button variant="hero" size="xl" className="sm:w-auto" onClick={openZeffyDonate}>
+              Donate Now <Heart />
+            </Button>
             <p className="text-xs text-muted-foreground mt-4">ActionSteps Counseling, Inc. is a 501(c)(3) nonprofit. All donations are tax-deductible to the fullest extent allowed by law.</p>
           </div>
         </div>
@@ -72,8 +54,12 @@ export default function Donate() {
         <div className="container max-w-4xl text-center reveal">
           <h2 className="font-display text-4xl md:text-5xl font-bold text-primary leading-tight">Why your donation <span className="text-gradient">multiplies</span>.</h2>
           <p className="mt-5 text-lg text-muted-foreground">Every $1 invested in ActionSteps generates an estimated $7+ in taxpayer savings through reduced incarceration, court costs, and recidivism. Your gift isn't charity — it's the smartest public safety investment in Oklahoma.</p>
+          <Button variant="cta" size="xl" className="mt-8" onClick={openZeffyDonate}>
+            Donate Now <Heart />
+          </Button>
         </div>
       </section>
+      <ZeffyDonateModal />
     </Layout>
   );
 }

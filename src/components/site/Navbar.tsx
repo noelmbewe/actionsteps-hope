@@ -1,16 +1,31 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
+const programs = [
   { to: "/programs/arise", label: "ARISE" },
   { to: "/programs/ascend", label: "ASCEND" },
+];
+
+type NavItem = { to: string; label: string } | { type: "programs"; label: string };
+
+const navItems: NavItem[] = [
+  { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
+  { type: "programs", label: "Programs" },
   { to: "/impact", label: "Impact" },
   { to: "/education", label: "Education" },
+  { to: "/articles", label: "Articles" },
   { to: "/press-room", label: "Press Room" },
   { to: "/contact", label: "Contact" },
 ];
@@ -19,6 +34,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const programsActive = pathname.startsWith("/programs");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -29,6 +45,24 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `px-3 py-2 rounded-full text-sm font-medium transition-colors ${
+      isActive
+        ? "text-primary bg-accent"
+        : scrolled
+          ? "text-foreground/75 hover:text-primary hover:bg-accent/60"
+          : "text-foreground hover:text-primary hover:bg-accent"
+    }`;
+
+  const triggerClass = cn(
+    "rounded-full px-3 py-2 h-auto text-sm font-medium transition-colors bg-transparent",
+    programsActive
+      ? "text-primary bg-accent"
+      : scrolled
+        ? "text-foreground/75 hover:text-primary hover:bg-accent/60"
+        : "text-foreground hover:text-primary hover:bg-accent",
+  );
+
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border shadow-soft transition-all duration-300">
       <div className="container flex items-center justify-between h-18 py-3">
@@ -37,23 +71,48 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.to === "/"}
-              className={({ isActive }) =>
-                `px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isActive 
-                    ? "text-primary bg-accent" 
-                    : scrolled 
-                      ? "text-foreground/75 hover:text-primary hover:bg-accent/60"
-                      : "text-foreground hover:text-primary hover:bg-accent"
-                }`
-              }
-            >
-              {l.label}
-            </NavLink>
+          {navItems.map((item) => (
+            <Fragment key={item.label}>
+              {"type" in item ? (
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className={triggerClass}>
+                        {item.label}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-56 gap-1 p-3">
+                          {programs.map((p) => (
+                            <li key={p.to}>
+                              <NavLink
+                                to={p.to}
+                                className={({ isActive }) =>
+                                  `block rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                                    isActive
+                                      ? "bg-accent text-primary"
+                                      : "text-foreground/80 hover:bg-accent/60 hover:text-primary"
+                                  }`
+                                }
+                              >
+                                {p.label}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              ) : (
+                <NavLink
+                  to={item.to}
+                  end={item.to === "/"}
+                  className={linkClass}
+                >
+                  {item.label}
+                </NavLink>
+              )}
+            </Fragment>
           ))}
         </nav>
 
@@ -78,18 +137,37 @@ export default function Navbar() {
       {open && (
         <div className="lg:hidden bg-background border-t border-border">
           <div className="container py-4 flex flex-col gap-1">
-            {links.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                end={l.to === "/"}
-                className={({ isActive }) =>
-                  `px-4 py-3 rounded-xl font-medium ${isActive ? "bg-accent text-primary" : "text-foreground/80"}`
-                }
-              >
-                {l.label}
-              </NavLink>
-            ))}
+            {navItems.map((item) =>
+              "type" in item ? (
+                <div key={item.label}>
+                  <div className="px-4 py-3 rounded-xl font-medium text-foreground/80">Programs</div>
+                  <div className="flex flex-col gap-1 pl-4 border-l-2 border-accent ml-5">
+                    {programs.map((p) => (
+                      <NavLink
+                        key={p.to}
+                        to={p.to}
+                        className={({ isActive }) =>
+                          `px-4 py-3 rounded-xl font-medium ${isActive ? "bg-accent text-primary" : "text-foreground/80"}`
+                        }
+                      >
+                        {p.label}
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === "/"}
+                  className={({ isActive }) =>
+                    `px-4 py-3 rounded-xl font-medium ${isActive ? "bg-accent text-primary" : "text-foreground/80"}`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ),
+            )}
             <Button asChild variant="hero" className="mt-2 rounded-full">
               <Link to="/donate">Donate Now</Link>
             </Button>
