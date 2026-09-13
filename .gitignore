@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 *dist.zip
+src/assets/video.mp4
 
 # API credentials (never commit)
 api/config.php
