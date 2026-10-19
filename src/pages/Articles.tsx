@@ -20,7 +20,7 @@ export default function Articles() {
   const load = () => {
     setLoading(true);
     setError(null);
-    getArticles()
+    getArticles("Article")
       .then((res) => setArticles(res.articles))
       .catch((e) => setError(e.message || "Could not load articles."))
       .finally(() => setLoading(false));

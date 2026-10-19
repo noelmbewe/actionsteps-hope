@@ -31,6 +31,40 @@ function get_connection(array $config): mysqli {
     }
 }
 
+/**
+ * Idempotent auto-migration. Adds columns introduced after the original
+ * release so freshly uploaded code works without a manual database step.
+ * Runs a single cheap information_schema lookup per request.
+ */
+function ensure_schema(mysqli $conn, array $config): void {
+    $db = $conn->real_escape_string($config['db']['name']);
+    $columns = [
+        'external_url' => 'VARCHAR(500) DEFAULT NULL',
+    ];
+    foreach ($columns as $column => $definition) {
+        $result = $conn->query(
+            "SELECT COUNT(*) AS c FROM information_schema.columns
+             WHERE table_schema = '$db' AND table_name = 'articles' AND column_name = '$column'"
+        );
+        if (!$result) {
+            continue; // Let the caller's error handling surface real issues.
+        }
+        if ((int)$result->fetch_assoc()['c'] === 0) {
+            $conn->query("ALTER TABLE articles ADD COLUMN `$column` $definition AFTER `category`");
+        }
+    }
+}
+
+/** Convert any uncaught PHP exception into a readable JSON error. */
+function register_error_handler(): void {
+    set_exception_handler(function (Throwable $e): void {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['error' => 'Server error.', 'detail' => $e->getMessage()]);
+        exit;
+    });
+}
+
 function send_json($data, int $status = 200): void {
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
@@ -56,6 +90,14 @@ function slugify(string $text): string {
     $text = preg_replace('/[^a-z0-9]+/', '-', $text);
     $text = trim($text, '-');
     return $text !== '' ? $text : 'article-' . time();
+}
+
+/** Absolute origin (scheme://host) of the current request. */
+function request_origin(): string {
+    $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    $scheme = $https ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? 'localhost';
+    return $scheme . '://' . $host;
 }
 
 function get_token_from_header(): ?string {

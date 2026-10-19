@@ -29,8 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require __DIR__ . '/helpers.php';
 
+register_error_handler();
+
 $config = load_config();
 $conn = get_connection($config);
+ensure_schema($conn, $config);
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
@@ -152,6 +155,57 @@ if ($method === 'PUT' && count($segments) === 1 && $segments[0] === 'me') {
         'username' => $newUsername,
         'email' => $newEmail,
     ]);
+}
+
+// ---- Upload image (multipart/form-data), authenticated ----
+//   POST /api/admin.php/upload  field: file  (jpeg/png/webp/gif, max 8MB)
+if ($method === 'POST' && count($segments) === 1 && $segments[0] === 'upload') {
+    if (empty($_FILES['file'])) {
+        send_error('No file uploaded. Use a form field named "file".', 422);
+    }
+    $file = $_FILES['file'];
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        send_error('Upload failed with error code ' . $file['error'], 422);
+    }
+    if ($file['size'] > 8 * 1024 * 1024) {
+        send_error('File must be 8MB or smaller.', 422);
+    }
+
+    $allowed = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/gif' => 'gif',
+    ];
+    $mime = mime_content_type($file['tmp_name']);
+    if (!isset($allowed[$mime])) {
+        send_error('Only JPG, PNG, WEBP and GIF images are allowed.', 422);
+    }
+
+    $ext = $allowed[$mime];
+    $name = bin2hex(random_bytes(12)) . '.' . $ext;
+
+    // Uploads live next to the api folder: /uploads/xxx.jpg
+    $uploadsDir = dirname(__DIR__) . '/uploads';
+    if (!is_dir($uploadsDir)) {
+        mkdir($uploadsDir, 0755, true);
+    }
+    // Self-protect the uploads folder: block direct PHP/script execution.
+    $ht = $uploadsDir . '/.htaccess';
+    if (!file_exists($ht)) {
+        @file_put_contents(
+            $ht,
+            "# Deny script execution inside uploads\n<FilesMatch \"\\.(php|phtml|php5|phar)$\">\n  Require all denied\n</FilesMatch>\n"
+        );
+    }
+
+    if (!move_uploaded_file($file['tmp_name'], $uploadsDir . '/' . $name)) {
+        send_error('Could not save the uploaded file.', 500);
+    }
+
+    // Absolute URL so images work from the frontend domain (the API may be on
+    // a different subdomain/origin than the site itself).
+    send_json(['url' => request_origin() . '/uploads/' . $name], 201);
 }
 
 // ---- /users endpoints ----
@@ -341,7 +395,7 @@ function handle_articles(mysqli $conn, string $method, array $segments): void {
     if (count($segments) === 1) {
         if ($method === 'GET') {
             $result = $conn->query(
-                "SELECT id, title, slug, excerpt, cover_image, category, author, status, featured,
+                "SELECT id, title, slug, excerpt, cover_image, category, external_url, author, status, featured,
                         DATE_FORMAT(created_at, '%M %d, %Y') AS date
                  FROM articles
                  ORDER BY created_at DESC"
@@ -357,17 +411,18 @@ function handle_articles(mysqli $conn, string $method, array $segments): void {
             $body = json_body();
             $article = validate_article($conn, $body, null);
             $stmt = $conn->prepare(
-                "INSERT INTO articles (title, slug, excerpt, body, cover_image, category, author, status, featured)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO articles (title, slug, excerpt, body, cover_image, category, external_url, author, status, featured)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             $stmt->bind_param(
-                'ssssssssi',
+                'sssssssssi',
                 $article['title'],
                 $article['slug'],
                 $article['excerpt'],
                 $article['body'],
                 $article['cover_image'],
                 $article['category'],
+                $article['external_url'],
                 $article['author'],
                 $article['status'],
                 $article['featured']
@@ -387,7 +442,7 @@ function handle_articles(mysqli $conn, string $method, array $segments): void {
 
         if ($method === 'GET') {
             $stmt = $conn->prepare(
-                "SELECT id, title, slug, excerpt, body, cover_image, category, author, status, featured,
+                "SELECT id, title, slug, excerpt, body, cover_image, category, external_url, author, status, featured,
                         DATE_FORMAT(created_at, '%Y-%m-%d') AS created_raw
                  FROM articles WHERE id = ?"
             );
@@ -402,19 +457,32 @@ function handle_articles(mysqli $conn, string $method, array $segments): void {
 
         if ($method === 'PUT') {
             $body = json_body();
+
+            // If no slug was provided (admin no longer edits slugs), keep the
+            // article's existing slug so the URL stays stable across edits.
+            $incomingSlug = trim((string)($body['slug'] ?? ''));
+            if ($incomingSlug === '') {
+                $fetch = $conn->prepare("SELECT slug FROM articles WHERE id = ?");
+                $fetch->bind_param('i', $id);
+                $fetch->execute();
+                $existing = $fetch->get_result()->fetch_assoc();
+                $body['slug'] = $existing ? $existing['slug'] : null;
+            }
+
             $article = validate_article($conn, $body, $id);
             $stmt = $conn->prepare(
-                "UPDATE articles SET title = ?, slug = ?, excerpt = ?, body = ?, cover_image = ?, category = ?, author = ?, status = ?, featured = ?
+                "UPDATE articles SET title = ?, slug = ?, excerpt = ?, body = ?, cover_image = ?, category = ?, external_url = ?, author = ?, status = ?, featured = ?
                  WHERE id = ?"
             );
             $stmt->bind_param(
-                'ssssssssii',
+                'sssssssssii',
                 $article['title'],
                 $article['slug'],
                 $article['excerpt'],
                 $article['body'],
                 $article['cover_image'],
                 $article['category'],
+                $article['external_url'],
                 $article['author'],
                 $article['status'],
                 $article['featured'],
@@ -441,12 +509,17 @@ function validate_article(mysqli $conn, array $body, ?int $ignoreId): array {
     $title = trim((string)($body['title'] ?? ''));
     $excerpt = trim((string)($body['excerpt'] ?? ''));
     $bodyText = (string)($body['body'] ?? '');
+    $external_url = trim((string)($body['external_url'] ?? ''));
 
     if ($title === '') {
         send_error('Title is required.', 422);
     }
-    if ($bodyText === '') {
-        send_error('Article body is required.', 422);
+    // Articles require written content. Press items with a source link don't.
+    if ($bodyText === '' && $external_url === '') {
+        send_error('Either the article body or a source link is required.', 422);
+    }
+    if ($external_url !== '' && !filter_var($external_url, FILTER_VALIDATE_URL)) {
+        send_error('The source link must be a valid URL (include https://).', 422);
     }
 
     $slug = trim((string)($body['slug'] ?? ''));
@@ -468,13 +541,21 @@ function validate_article(mysqli $conn, array $body, ?int $ignoreId): array {
         $slug = $slug . '-' . time();
     }
 
+    $cover_image = trim((string)($body['cover_image'] ?? ''));
+
+    $category = trim((string)($body['category'] ?? 'Article'));
+    if (!in_array($category, ['Article', 'Press'], true)) {
+        $category = 'Article';
+    }
+
     return [
         'title' => $title,
         'slug' => $slug,
         'excerpt' => $excerpt,
         'body' => $bodyText,
-        'cover_image' => trim((string)($body['cover_image'] ?? '')),
-        'category' => trim((string)($body['category'] ?? 'Article')) ?: 'Article',
+        'cover_image' => $cover_image,
+        'external_url' => $external_url !== '' ? $external_url : null,
+        'category' => $category,
         'author' => trim((string)($body['author'] ?? 'ActionSteps Counseling')) ?: 'ActionSteps Counseling',
         'status' => ($body['status'] ?? 'draft') === 'published' ? 'published' : 'draft',
         'featured' => !empty($body['featured']) ? 1 : 0,

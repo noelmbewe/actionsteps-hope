@@ -25,7 +25,6 @@ const navItems: NavItem[] = [
   { type: "programs", label: "Programs" },
   { to: "/impact", label: "Impact" },
   { to: "/education", label: "Education" },
-  { to: "/articles", label: "Articles" },
   { to: "/press-room", label: "Press Room" },
   { to: "/contact", label: "Contact" },
 ];

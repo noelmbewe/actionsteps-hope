@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/site/Layout";
-import { Calendar, User, Clock, ArrowLeft, Share2, Newspaper } from "lucide-react";
+import { Calendar, User, Clock, ArrowLeft, Share2, Newspaper, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getArticle, type Article } from "@/lib/api";
 import { toast } from "sonner";
@@ -51,12 +51,16 @@ export default function ArticleDetail() {
     );
   }
 
+  const isPress = article.category === "Press";
+  const backTo = isPress ? "/press-room" : "/articles";
+  const backLabel = isPress ? "Back to Press Room" : "Back to Articles";
+
   return (
     <Layout>
       <section className="pt-24">
         <div className="container max-w-3xl">
-          <Link to="/articles" className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:text-primary transition-colors mb-8">
-            <ArrowLeft className="h-4 w-4" /> All Articles
+          <Link to={backTo} className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:text-primary transition-colors mb-8">
+            <ArrowLeft className="h-4 w-4" /> {backLabel}
           </Link>
 
           <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
@@ -93,11 +97,19 @@ export default function ArticleDetail() {
             dangerouslySetInnerHTML={{ __html: article.body }}
           />
 
-          <div className="flex items-center justify-between border-t border-border mt-12 pt-8">
+          <div className="flex items-center justify-between gap-3 border-t border-border mt-12 pt-8">
             <Button asChild variant="outline" className="rounded-full">
-              <Link to="/articles">Back to all articles</Link>
+              <Link to={backTo}>{backLabel}</Link>
             </Button>
-            <Button
+            <div className="flex items-center gap-2">
+              {article.external_url && (
+                <Button asChild variant="hero" className="rounded-full">
+                  <a href={article.external_url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-4 w-4" /> Read original story
+                  </a>
+                </Button>
+              )}
+              <Button
               variant="ghost"
               className="rounded-full"
               onClick={() => {
@@ -107,6 +119,7 @@ export default function ArticleDetail() {
             >
               <Share2 className="h-4 w-4" /> Share
             </Button>
+            </div>
           </div>
         </div>
       </section>

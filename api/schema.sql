@@ -2,8 +2,8 @@
 -- Run this in phpMyAdmin (SQL tab) or via the MySQL command line to create
 -- the database tables used by the articles feature and the admin section.
 
-CREATE DATABASE IF NOT EXISTS `actionsteps`;
-USE `actionsteps`;
+CREATE DATABASE IF NOT EXISTS `actionst_actionsteps`;
+USE `actionst_actionsteps`;
 
 -- Drop existing tables if you want to start fresh (uncomment if needed):
 -- DROP TABLE IF EXISTS `articles`;
@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `excerpt` TEXT NOT NULL,
   `body` LONGTEXT NOT NULL,
   `cover_image` VARCHAR(500) DEFAULT NULL,
-  `category` VARCHAR(100) DEFAULT 'Article',
+  `category` ENUM('Article','Press') NOT NULL DEFAULT 'Article',
+  `external_url` VARCHAR(500) DEFAULT NULL,
   `author` VARCHAR(150) NOT NULL DEFAULT 'ActionSteps Counseling',
   `status` ENUM('draft','published') NOT NULL DEFAULT 'draft',
   `featured` TINYINT(1) NOT NULL DEFAULT 0,

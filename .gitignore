@@ -23,7 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 *dist.zip
+
+
 src/assets/video.mp4
 
 # API credentials (never commit)
 api/config.php
+
+# Local dev API proxy target (Vite only)
+.env
+.env.local
+

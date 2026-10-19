@@ -1,0 +1,23 @@
+# ActionSteps Counseling API - sits at the document root of api.actionstepscounseling.org
+# (or as an /api folder under the main site in the old layout).
+# This file is deployed with the api/ folder; it protects internal files.
+
+# Block direct access to sensitive/internal files over the web
+<FilesMatch "^(config\.php|config\.example\.php|schema\.sql|helpers\.php)$">
+  Require all denied
+</FilesMatch>
+
+# Deny listing and direct access to the tools folder (CLI/admin scripts)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^tools/ - [F,L]
+</IfModule>
+
+# Never serve dotfiles (.dbpass, .git, etc.)
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+# Treat PHP files (the API entry points) as scripts. Everything else is static.
+# No SPA rewrite here - this subdomain is API-only.
+Options -Indexes

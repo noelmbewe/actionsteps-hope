@@ -19,8 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require __DIR__ . '/helpers.php';
 
+register_error_handler();
+
 $config = load_config();
 $conn = get_connection($config);
+ensure_schema($conn, $config);
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
@@ -39,15 +42,35 @@ if ($method !== 'GET') {
     send_error('Method not allowed.', 405);
 }
 
-if (count($segments) === 0) {
-    // List published articles, newest first.
-    $stmt = $conn->prepare(
-        "SELECT id, title, slug, excerpt, cover_image, category, author, featured,
-                DATE_FORMAT(created_at, '%M %d, %Y') AS date
-         FROM articles
-         WHERE status = 'published'
-         ORDER BY featured DESC, created_at DESC"
-    );
+// URL conventions (mirroring admin.php):
+//   /api/index.php/articles           -> list published articles
+//   /api/index.php/articles/{slug}    -> single published article
+//   /api/index.php                    -> list published articles (shortcut)
+$listPath = count($segments) === 0 || (count($segments) === 1 && $segments[0] === 'articles');
+
+if ($listPath) {
+    // List published articles, newest first. Optionally filter by category:
+    //   GET /api/index.php/articles?category=Article
+    //   GET /api/index.php/articles?category=Press
+    $category = trim((string)($_GET['category'] ?? ''));
+    if ($category !== '') {
+        $stmt = $conn->prepare(
+            "SELECT id, title, slug, excerpt, cover_image, category, external_url, author, featured,
+                    DATE_FORMAT(created_at, '%M %d, %Y') AS date
+             FROM articles
+             WHERE status = 'published' AND category = ?
+             ORDER BY featured DESC, created_at DESC"
+        );
+        $stmt->bind_param('s', $category);
+    } else {
+        $stmt = $conn->prepare(
+            "SELECT id, title, slug, excerpt, cover_image, category, external_url, author, featured,
+                    DATE_FORMAT(created_at, '%M %d, %Y') AS date
+             FROM articles
+             WHERE status = 'published'
+             ORDER BY featured DESC, created_at DESC"
+        );
+    }
     $stmt->execute();
     $result = $stmt->get_result();
     $articles = [];
@@ -57,23 +80,20 @@ if (count($segments) === 0) {
     send_json(['articles' => $articles]);
 }
 
-if (count($segments) === 1) {
+if (count($segments) === 2 && $segments[0] === 'articles') {
     // Single article by id or slug.
-    $key = $segments[0];
+    $key = $segments[1];
+    $cols = "SELECT id, title, slug, excerpt, body, cover_image, category, external_url, author, featured,
+                    DATE_FORMAT(created_at, '%M %d, %Y') AS date
+             FROM articles";
     if (is_numeric($key)) {
         $stmt = $conn->prepare(
-            "SELECT id, title, slug, excerpt, body, cover_image, category, author, featured,
-                    DATE_FORMAT(created_at, '%M %d, %Y') AS date
-             FROM articles
-             WHERE id = ? AND status = 'published'"
+            $cols . " WHERE id = ? AND status = 'published'"
         );
         $stmt->bind_param('i', $key);
     } else {
         $stmt = $conn->prepare(
-            "SELECT id, title, slug, excerpt, body, cover_image, category, author, featured,
-                    DATE_FORMAT(created_at, '%M %d, %Y') AS date
-             FROM articles
-             WHERE slug = ? AND status = 'published'"
+            $cols . " WHERE slug = ? AND status = 'published'"
         );
         $stmt->bind_param('s', $key);
     }

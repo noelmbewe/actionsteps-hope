@@ -1,8 +1,10 @@
 // API configuration and typed helpers for the ActionSteps articles backend.
 
-// The PHP API lives in an /api folder uploaded alongside the static site.
-// Adjust API_BASE if your deployment places it elsewhere.
-export const API_BASE = "/api";
+// The PHP API lives on a dedicated subdomain. Set VITE_API_BASE at build time
+// to override (e.g. "/api" for a same-origin setup or a staging host).
+export const API_BASE =
+  (import.meta.env.VITE_API_BASE as string | undefined) ||
+  "https://api.actionstepscounseling.org";
 
 export type ArticleStatus = "draft" | "published";
 
@@ -13,7 +15,8 @@ export type Article = {
   excerpt: string;
   body: string;
   cover_image: string | null;
-  category: string;
+  category: "Article" | "Press" | string;
+  external_url: string | null;
   author: string;
   status: ArticleStatus;
   featured: number;
@@ -32,10 +35,11 @@ export class ApiError extends Error {
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem("actionsteps_token");
+  const isForm = options.body instanceof FormData;
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
     ...(options.headers as Record<string, string> | undefined),
   };
+  if (!isForm) headers["Content-Type"] = "application/json";
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
@@ -54,7 +58,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 // ---- Public ----
-export const getArticles = () => request<{ articles: ArticleListItem[] }>("/index.php/articles");
+export const getArticles = (category?: string) =>
+  request<{ articles: ArticleListItem[] }>(
+    `/index.php/articles${category ? `?category=${encodeURIComponent(category)}` : ""}`,
+  );
 
 export const getArticle = (key: string | number) =>
   request<Article>(`/index.php/articles/${key}`);
@@ -127,3 +134,9 @@ export const adminUpdateArticle = (id: number, data: Partial<Article>) =>
 
 export const adminDeleteArticle = (id: number) =>
   request<{ deleted: boolean }>(`/admin.php/articles/${id}`, { method: "DELETE" });
+
+export const adminUploadImage = (file: File) => {
+  const form = new FormData();
+  form.append("file", file);
+  return request<{ url: string }>("/admin.php/upload", { method: "POST", body: form });
+};
