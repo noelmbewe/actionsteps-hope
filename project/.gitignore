@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+node_modules/
 dist
 dist-ssr
 *.local
@@ -22,10 +22,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*dist.zip
-
-
-src/assets/video.mp4
+*.zip
+*.mp4
+*.m4v
+*.mov
+*.avi
+*.mkv
+*.webm
+*.mpeg
+*.mpg
+*.wmv
+*.flv
 
 # API credentials (never commit)
 api/config.php
@@ -33,4 +40,3 @@ api/config.php
 # Local dev API proxy target (Vite only)
 .env
 .env.local
-
