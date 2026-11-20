@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand — ActionSteps blues */
+    --background: 210 40% 99%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Deep corporate navy-blue */
+    --primary: 220 85% 22%;
+    --primary-foreground: 210 40% 99%;
+    --primary-glow: 210 95% 55%;
+
+    /* Lighter accent sky-blue (logo swoosh) */
+    --secondary: 200 95% 60%;
+    --secondary-foreground: 220 85% 15%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 42%;
+
+    --accent: 200 100% 92%;
+    --accent-foreground: 220 85% 22%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 210 95% 55%;
+
+    --radius: 1rem;
+
+    /* Gradients inspired by the swoosh */
+    --gradient-hero: linear-gradient(135deg, hsl(220 85% 18%) 0%, hsl(215 80% 30%) 45%, hsl(200 95% 55%) 100%);
+    --gradient-swoosh: linear-gradient(120deg, hsl(220 85% 22%), hsl(210 95% 55%));
+    --gradient-soft: linear-gradient(180deg, hsl(210 60% 98%), hsl(200 80% 95%));
+    --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.85), hsl(210 60% 98% / 0.6));
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(220 85% 22% / 0.08);
+    --shadow-elegant: 0 20px 50px -20px hsl(220 85% 22% / 0.25);
+    --shadow-glow: 0 0 60px hsl(210 95% 55% / 0.35);
+
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 95% 60%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 213 27% 84%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(0 0% 100% / 0.5);
+    box-shadow: var(--shadow-soft);
+  }
+  .glass-dark {
+    background: linear-gradient(135deg, hsl(220 85% 22% / 0.6), hsl(220 85% 15% / 0.4));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(0 0% 100% / 0.15);
+  }
+  .text-gradient {
+    background: var(--gradient-swoosh);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

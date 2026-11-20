@@ -1,0 +1,71 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Remove .html extension (redirect /about.html -> /about)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)\.html$ /$1 [L,R=301]
+
+  # Don't rewrite requests that look like real static files/assets so missing
+  # files return a true 404 instead of being served index.html with HTTP 200.
+  RewriteCond %{REQUEST_URI} \.(png|jpe?g|gif|svg|webp|avif|ico|css|js|m?js|json|woff2?|ttf|otf|eot|mp4|webm|mp3|pdf|txt|xml)$ [NC]
+  RewriteRule .* - [L]
+
+  # Redirect all non-file and non-directory requests to index.html (SPA fallback)
+  # Exclude the /api directory so the PHP endpoints are never rewritten to index.html.
+  RewriteCond %{REQUEST_URI} !^/api(/|$)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [QSA,L]
+</IfModule>
+
+# Return a proper 404 status page for the SPA's NotFound route
+ErrorDocument 404 /index.html
+
+# Enable GZIP compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/ld+json image/svg+xml
+</IfModule>
+
+# Set proper cache headers
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  
+  # CSS and JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  
+  # Fonts
+  ExpiresByType font/truetype "access plus 1 year"
+  ExpiresByType font/opentype "access plus 1 year"
+  ExpiresByType application/x-font-woff "access plus 1 year"
+  ExpiresByType application/x-font-woff2 "access plus 1 year"
+  
+  # HTML and default
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>
+
+# Set proper headers
+<IfModule mod_headers.c>
+  Header set X-UA-Compatible "IE=edge"
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Disable directory listing
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

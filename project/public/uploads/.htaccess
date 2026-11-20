@@ -1,0 +1,22 @@
+# Security: uploads are user-provided files. Never let PHP (or anything else executable)
+# run from this directory, even if a malicious file slips through validation.
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+
+<IfModule mod_php7.c>
+  php_flag engine off
+</IfModule>
+
+<IfModule mod_php8.c>
+  php_flag engine off
+</IfModule>
+
+<FilesMatch "\.(?i:php[0-9]?|phtml|cgi|pl|py|sh)$">
+  Require all denied
+</FilesMatch>
+
+# Also deny direct requests to this .htaccess itself
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
